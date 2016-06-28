@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vector3", "Vector3\Vector3.vcxproj", "{A4357B06-6B3C-478E-BE6B-74C6ADA3D95E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rotation", "Rotation\Rotation.vcxproj", "{3456C8C6-F73F-4AAC-A6DA-7C7AD23911A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A4357B06-6B3C-478E-BE6B-74C6ADA3D95E}.Debug|Win32.Build.0 = Debug|Win32
 		{A4357B06-6B3C-478E-BE6B-74C6ADA3D95E}.Release|Win32.ActiveCfg = Release|Win32
 		{A4357B06-6B3C-478E-BE6B-74C6ADA3D95E}.Release|Win32.Build.0 = Release|Win32
+		{3456C8C6-F73F-4AAC-A6DA-7C7AD23911A4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3456C8C6-F73F-4AAC-A6DA-7C7AD23911A4}.Debug|Win32.Build.0 = Debug|Win32
+		{3456C8C6-F73F-4AAC-A6DA-7C7AD23911A4}.Release|Win32.ActiveCfg = Release|Win32
+		{3456C8C6-F73F-4AAC-A6DA-7C7AD23911A4}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
