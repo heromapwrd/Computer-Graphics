@@ -19,7 +19,7 @@ public:
 public:
 	void identity();
 	// 根据欧拉角构造矩阵
-	void setup(const EulerAngles& oritention);
+	void setup(const EulerAngles& orientation);
 	// 根据四元数构造矩阵
 	void fromInertialToObjectQuaternion(const Quaternion& q);
 	void fromObjectToInertialQuaternion(const Quaternion& q);

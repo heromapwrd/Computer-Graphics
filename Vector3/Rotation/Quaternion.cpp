@@ -10,7 +10,7 @@
 #include"Vector3.h"
 #include "EulerAngles.h"
 
-const Quaternion kQuaternionIdentity = { 1.0f, 0.0f, 0.0f, 0.0f };
+const Quaternion kQuaternionIdentity(1.0f, 0.0f, 0.0f, 0.0f);
 
 void Quaternion::setToRotateAboutX(float theta)
 {

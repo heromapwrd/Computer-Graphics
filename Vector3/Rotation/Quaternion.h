@@ -15,6 +15,10 @@ public:
 	float w, x, y, z;
 public:
 	Quaternion(){}
+	Quaternion(float fw, float fx, float fy, float fz) :w(fw), x(fx), y(fy), z(fz)
+	{
+
+	}
 	void identity(){ w = 1.0f, x = y = z = 0.0f; }
 	void setToRotateAboutX(float theta);
 	void setToRotateAboutY(float theta);
