@@ -88,6 +88,9 @@
   <ItemGroup>
     <ClCompile Include="EulerAngles.cpp" />
     <ClCompile Include="MathUtil.cpp" />
+    <ClCompile Include="Matrix4x3.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="RotationMatrix.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

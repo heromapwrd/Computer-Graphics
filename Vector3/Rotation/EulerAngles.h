@@ -40,7 +40,7 @@ public:
 	// 输入矩阵假设为物体-世界或者世界-物体转换矩阵
 	// 评议部分被省略，并且假设矩阵式正交的
 	void fromObjectToWorldMatrix(const Matrix4x3& m);
-	void fromWorldToobjectMatrix(const Matrix4x3& m);
+	void fromWorldToObjectMatrix(const Matrix4x3& m);
 	// 从旋转矩阵到欧拉角
 	void fromRotationMatrix(const RotationMatrix& m);
 };
