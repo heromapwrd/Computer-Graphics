@@ -40,9 +40,9 @@ public:
 	// 构造沿坐标轴缩放的矩阵
 	void setupScale(const Vector3& s);
 	// 构造沿任意轴缩放的矩阵
-	void SetupScale(const Vector3& axis, float k);
+	void SetupScaleAlongAxis(const Vector3& axis, float k);
 	// 构造切边矩阵
-	void setupShear(int aixs, float s, float t);
+	void setupShear(int axis, float s, float t);
 	// 构造投影矩阵，投影平面过原点
 	void setupProject(const Vector3& n);
 	// 构造反射矩阵
