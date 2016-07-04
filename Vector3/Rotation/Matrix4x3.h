@@ -49,6 +49,7 @@ public:
 	void setupReflect(int axis, float k = 0.0f);
 	// 构造沿任意平面反射的矩阵
 	void setupReflect(const Vector3& n);
+	Matrix4x3& operator = (const Matrix4x3& m);
 };
 
 // 运算符*用来变换点或连接矩阵，乘法的顺序从左向右沿变换的顺序进行

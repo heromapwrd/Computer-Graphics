@@ -307,6 +307,16 @@ void Matrix4x3::setupReflect(const Vector3& n)
 
 }
 
+//赋值操作符
+Matrix4x3& Matrix4x3::operator = (const Matrix4x3& m)
+{
+	m11 = m.m11; m12 = m.m12; m13 = m.m13;
+	m21 = m.m21; m22 = m.m22; m23 = m.m23;
+	m31 = m.m31; m32 = m.m32; m33 = m.m33;
+	tx = m.tx; ty = m.ty; tz = m.tz;
+	return *this;
+}
+
 
 ////////////////////////////////////////////////////////////////
 //
@@ -317,50 +327,132 @@ void Matrix4x3::setupReflect(const Vector3& n)
 // 运算符*用来变换点或连接矩阵，乘法的顺序从左向右沿变换的顺序进行
 Vector3 operator*(const Vector3& p, const Matrix4x3& m)
 {
-
+	return Vector3(
+		p.x*m.m11 + p.y*m.m21 + p.z*m.m31 + m.tx,
+		p.x*m.m12 + p.y*m.m22 + p.z*m.m32 + m.ty,
+		p.x*m.m13 + p.y*m.m23 + p.z*m.m33 + m.tz
+		);
 }
 
 Matrix4x3 operator*(const Matrix4x3& a, const Matrix4x3& b)
 {
+	Matrix4x3 r;
+
+	// Compute the upper 3x3 (linear transformation) portion
+
+	r.m11 = a.m11*b.m11 + a.m12*b.m21 + a.m13*b.m31;
+	r.m12 = a.m11*b.m12 + a.m12*b.m22 + a.m13*b.m32;
+	r.m13 = a.m11*b.m13 + a.m12*b.m23 + a.m13*b.m33;
+
+	r.m21 = a.m21*b.m11 + a.m22*b.m21 + a.m23*b.m31;
+	r.m22 = a.m21*b.m12 + a.m22*b.m22 + a.m23*b.m32;
+	r.m23 = a.m21*b.m13 + a.m22*b.m23 + a.m23*b.m33;
+
+	r.m31 = a.m31*b.m11 + a.m32*b.m21 + a.m33*b.m31;
+	r.m32 = a.m31*b.m12 + a.m32*b.m22 + a.m33*b.m32;
+	r.m33 = a.m31*b.m13 + a.m32*b.m23 + a.m33*b.m33;
+
+	// Compute the translation portion
+
+	r.tx = a.tx*b.m11 + a.ty*b.m21 + a.tz*b.m31 + b.tx;
+	r.ty = a.tx*b.m12 + a.ty*b.m22 + a.tz*b.m32 + b.ty;
+	r.tz = a.tx*b.m13 + a.ty*b.m23 + a.tz*b.m33 + b.tz;
+
+	// Return it.  Ouch - involves a copy constructor call.  If speed
+	// is critical, we may need a seperate function which places the
+	// result where we want it...
+
+	return r;
 
 }
 
 // 运算符*=，保持和C++标准语法的一致性
 Vector3& operator*=(const Vector3& p, const Matrix4x3& m)
 {
-
+	p = p * m;
+	return p;
 }
 
 Matrix4x3& operator*=(const Matrix4x3& a, const Matrix4x3& b)
 {
-
+	a = a * b;
+	return a;
 }
 
 // 计算3x3部分的行列式值
 float determinant(const Matrix4x3& m)
 {
-
+	return
+		m.m11 * (m.m22*m.m33 - m.m23*m.m32)
+		+ m.m12 * (m.m23*m.m31 - m.m21*m.m33)
+		+ m.m13 * (m.m21*m.m32 - m.m22*m.m31);
 }
 
 // 计算矩阵的逆
 Matrix4x3 inverse(const Matrix4x3& m)
 {
+	// Compute the determinant
+
+	float	det = determinant(m);
+
+	// If we're singular, then the determinant is zero and there's
+	// no inverse
+
+	assert(fabs(det) > 0.000001f);
+
+	// Compute one over the determinant, so we divide once and
+	// can *multiply* per element
+
+	float	oneOverDet = 1.0f / det;
+
+	// Compute the 3x3 portion of the inverse, by
+	// dividing the adjoint by the determinant
+
+	Matrix4x3	r;
+
+	r.m11 = (m.m22*m.m33 - m.m23*m.m32) * oneOverDet;
+	r.m12 = (m.m13*m.m32 - m.m12*m.m33) * oneOverDet;
+	r.m13 = (m.m12*m.m23 - m.m13*m.m22) * oneOverDet;
+
+	r.m21 = (m.m23*m.m31 - m.m21*m.m33) * oneOverDet;
+	r.m22 = (m.m11*m.m33 - m.m13*m.m31) * oneOverDet;
+	r.m23 = (m.m13*m.m21 - m.m11*m.m23) * oneOverDet;
+
+	r.m31 = (m.m21*m.m32 - m.m22*m.m31) * oneOverDet;
+	r.m32 = (m.m12*m.m31 - m.m11*m.m32) * oneOverDet;
+	r.m33 = (m.m11*m.m22 - m.m12*m.m21) * oneOverDet;
+
+	// Compute the translation portion of the inverse
+
+	r.tx = -(m.tx*r.m11 + m.ty*r.m21 + m.tz*r.m31);
+	r.ty = -(m.tx*r.m12 + m.ty*r.m22 + m.tz*r.m32);
+	r.tz = -(m.tx*r.m13 + m.ty*r.m23 + m.tz*r.m33);
+
+	// Return it.  Ouch - involves a copy constructor call.  If speed
+	// is critical, we may need a seperate function which places the
+	// result where we want it...
+
+	return r;
 
 }
 
 // 提取矩阵的平移部分
 Vector3 getTranslation(const Matrix4x3& m)
 {
-
+	return Vector3(m.tx, m.ty, m.tz);
 }
 
 // 从局部矩阵→父矩阵或者父矩阵→局部矩阵取位置/方位
 Vector3 getPositionFromParentToLocalMatrix(const Matrix4x3& m)
 {
-
+	return Vector3(
+		-(m.tx*m.m11 + m.ty*m.m12 + m.tz*m.m13),
+		-(m.tx*m.m21 + m.ty*m.m22 + m.tz*m.m23),
+		-(m.tx*m.m31 + m.ty*m.m32 + m.tz*m.m33)
+		);
 }
 
 Vector3 getPositionFromLocalToParentMatrix(const Matrix4x3& m)
 {
-
+	return Vector3(m.tx, m.ty, m.tz);
 }
